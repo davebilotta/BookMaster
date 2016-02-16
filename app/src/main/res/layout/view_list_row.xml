@@ -5,42 +5,45 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="179dp">
+            android:layout_height="118dp"
+            android:weightSum="1">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
+            android:text="Title"
             android:textStyle="bold"
             android:id="@+id/row_title" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
+                android:text="Authors"
+                android:textStyle="italic"
                 android:id="@+id/row_authors" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/row_desc" />
+                android:text="Description"
+                android:id="@+id/row_desc"
+                android:layout_weight="0.13" />
 
             <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="Year"
             android:id="@+id/row_year" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="Publisher"
             android:id="@+id/row_publisher" />
 
     </LinearLayout>

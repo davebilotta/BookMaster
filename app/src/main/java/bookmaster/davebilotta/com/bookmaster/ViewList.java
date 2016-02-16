@@ -26,6 +26,12 @@ public class ViewList extends ListActivity {
         public String publishers;
         public String isbn;
 
+        //ISBN13 format is:
+        //    N-NNN-NNNNN-N (e.g. 0-394-82472-5)
+
+        // ISBN13 format is:
+        //    NNN-N-NNNN-NNNN-N (e.g. 978-0-7172-6059-1)
+
         public BookView(String title, String desc, String authors, String year, String publishers, String isbn) {
             this.title = title;
             this.desc = desc;
@@ -66,7 +72,35 @@ public class ViewList extends ListActivity {
         public BookListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
             books = new ArrayList<BookView>();
-                buildBooks();
+                buildBooksTest();
+        }
+
+        public void buildBooksTest() {
+            /* Test method used to populate view screen with date */
+            // Title, Description, Authors, Year, Publisher, ISBN
+            //
+
+            String[][] bookList = {
+            {"The Cat In The Hat","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","978-0-7172-6059-1"},
+            {"How The Grinch Stole Christmas!","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","0-394-80079-6"},
+            {"Pride and Prejudice","","Jane Austen","1813","",""},
+            {"To Kill A Mockingbird","Classic Book","Harper Lee","1960","Harper Classics","978-0-7172-6059-1"},
+            {"The Great Gatsby","","F. Scott Fitzgerald","1925","Random House",""},
+            {"Jane Eyre","Classic","Charlotte Bronte","1827","",""},
+            {"Charlie and the Chocolate Factory","Lukas' Favorite","Roald Dahl","1964","Alfred A. Knopf, Inc.",""},
+            {"The Mouse and the Motorcycle","Children's Classic","Beverly Cleary","1965","William Morrow",""},
+            {"Charlie and the Great Glass Elevator","Sequel to Charlie and the Chocolate Factory","Roald Dahl","1972","Alfred A. Knopf, Inc.","0-394-82472-5"},
+
+            };
+
+            // TODO: Get date it was entered
+
+
+            for (int i = 0; i < bookList.length; i++) {
+                String[] b = bookList[i];
+                books.add(new BookView(b[0],b[1],b[2],b[3],b[4],b[5]));
+            }
+
         }
 
         public void buildBooks() {
