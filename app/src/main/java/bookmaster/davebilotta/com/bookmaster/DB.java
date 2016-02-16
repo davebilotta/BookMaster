@@ -54,7 +54,7 @@ public class DB {
         }
     } */
 
-    public long insertEntry(String title, String desc, String authors, String year, String publisher, String isbn) {
+    public long insertBook(String title, String desc, String authors, String year, String publisher, String isbn) {
         try {
             ContentValues entry = new ContentValues();
             entry.put(DBShared.ITEM_TITLE, title);
@@ -76,7 +76,7 @@ public class DB {
         }
     }
 
-    public Cursor getEntries() {
+    public Cursor getBooks() {
         Cursor c = db.query(DBShared.TABLE_NAME,null,null,null,null,null,null);
         return c;
     }

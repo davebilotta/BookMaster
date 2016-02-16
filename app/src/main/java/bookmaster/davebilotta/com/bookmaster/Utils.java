@@ -8,10 +8,11 @@ import android.util.Log;
 public class Utils {
 
     public static void log(String msg) {
-        Log.v("Message", msg);
+
+        Log.v("Message", "***** " + msg + " *****");
     }
 
     public static void log (String tag, String msg) {
-       Log.v(tag, msg);
+       Log.v(tag, "***** " + msg + " *****");
     }
 }

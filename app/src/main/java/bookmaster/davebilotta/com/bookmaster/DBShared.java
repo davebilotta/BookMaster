@@ -5,7 +5,7 @@ package bookmaster.davebilotta.com.bookmaster;
  */
 public class DBShared {
     public static final String DATABASE_NAME = "datastorage";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String TABLE_NAME = "books";
     public static final String KEY_ID = "_id";
     public static final String CREATE_DATE = "creationdate";

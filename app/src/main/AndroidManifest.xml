@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewList"
-            android:label="@string/title_activity_new_list"
+            android:name=".BookEntry"
+            android:label="BookEntry"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ViewList"

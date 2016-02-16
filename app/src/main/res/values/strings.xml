@@ -10,7 +10,8 @@
     <string name="year_text_label">Year</string>
     <string name="publisher_text_label">Publisher</string>
     <string name="isbn_text_label">ISBN</string>
-
     <string name="cancel_text">Cancel</string>
     <string name="save_text">Save</string>
+
+
 </resources>

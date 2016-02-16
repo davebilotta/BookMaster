@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void newListOnClick(View view) {
-        startActivity(new Intent(this, NewList.class));
+        startActivity(new Intent(this, BookEntry.class));
     }
 
     public void viewListOnClick(View view) {

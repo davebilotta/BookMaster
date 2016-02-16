@@ -44,31 +44,38 @@ public class BookEntry extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    saveEntry();
+                saveEntry();
             }
         });
     }
 
     public void saveEntry() {
         //String title, String desc, String authors, String year, String publisher, String isbn) {
+        title = (EditText) findViewById(R.id.titleText);
+        desc = (EditText) findViewById(R.id.descText);
+        authors = (EditText) findViewById(R.id.authorsText);
+        year = (EditText) findViewById(R.id.yearText);
+        publisher  = (EditText) findViewById(R.id.publisherText);
+        isbn = (EditText) findViewById(R.id.isbnText);
+
         try {
-            db.insertEntry(title.getText().toString(),
+            db.insertBook(
+                    title.getText().toString(),
                     desc.getText().toString(),
                     authors.getText().toString(),
                     year.getText().toString(),
                     publisher.getText().toString(),
-                    isbn.getText().toString()
-            );
+                    isbn.getText().toString());
 
             db.close();
 
             // Now clear everything
-            title.setText("");
-            isbn.setText("");
+            /*title.setText("");
             desc.setText("");
             authors.setText("");
             year.setText("");
             publisher.setText("");
+            isbn.setText(""); */
 
             // TODO: Show Snackbar so user knows item was saved and they can keep adding more
             // TODO: Allow them to Undo?

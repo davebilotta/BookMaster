@@ -15,11 +15,11 @@ public class DBHelper extends SQLiteOpenHelper {
             DBShared.KEY_ID + " integer primary key autoincrement, " +
             DBShared.ITEM_TITLE + " text not null, " +
             DBShared.ITEM_COUNT + " integer, " +
-            DBShared.ITEM_ISBN + " text not null, " +
-            DBShared.ITEM_DESC + " text not null, " +
-            DBShared.ITEM_AUTHORS + " text not null, " +
-            DBShared.ITEM_YEAR + " text not null, " +
-            DBShared.ITEM_PUBLISHER + " text not null, " +
+            DBShared.ITEM_ISBN + " text, " +
+            DBShared.ITEM_DESC + " text, " +
+            DBShared.ITEM_AUTHORS + " text, " +
+            DBShared.ITEM_YEAR + " text, " +
+            DBShared.ITEM_PUBLISHER + " text, " +
             DBShared.CREATE_DATE + " long);";
 
     public DBHelper (Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
