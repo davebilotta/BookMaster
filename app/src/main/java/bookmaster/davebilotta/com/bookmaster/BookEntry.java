@@ -3,6 +3,8 @@ package bookmaster.davebilotta.com.bookmaster;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +14,7 @@ import android.widget.EditText;
  *
  * This is ued to create a new Book (manual entry) or update an existing entry
  */
-public class BookEntry extends Activity {
+public class BookEntry extends Activity  {
 
     EditText title,desc,authors,year,publisher, isbn;
     Button cancel,save;
@@ -79,6 +81,7 @@ public class BookEntry extends Activity {
 
             // TODO: Show Snackbar so user knows item was saved and they can keep adding more
             // TODO: Allow them to Undo?
+            Utils.showUserMessage(this,"Book added");
         }
         catch (Exception e) {
             Utils.log(e.getMessage());

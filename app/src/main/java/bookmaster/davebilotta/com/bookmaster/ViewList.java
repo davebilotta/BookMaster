@@ -52,6 +52,7 @@ public class ViewList extends ListActivity {
         adapter = new BookListAdapter(this);
         this.setListAdapter(adapter);
 
+        Utils.showUserMessage(this, "List generated");
         // TODO: Re-introduce Floating Action Bar
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -73,6 +74,7 @@ public class ViewList extends ListActivity {
             inflater = LayoutInflater.from(context);
             books = new ArrayList<BookView>();
                 buildBooksTest();
+
         }
 
         public void buildBooksTest() {
