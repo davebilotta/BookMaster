@@ -4,21 +4,22 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ViewList extends ListActivity {
+public class ViewList extends ListActivity implements AdapterView.OnItemClickListener {
 
     DB db;
     BookListAdapter adapter;
 
-    private class BookView {
+     private class BookView {
         public String title;
         public String desc;
         public String authors;
@@ -52,7 +53,6 @@ public class ViewList extends ListActivity {
         adapter = new BookListAdapter(this);
         this.setListAdapter(adapter);
 
-        Utils.showUserMessage(this, "List generated");
         // TODO: Re-introduce Floating Action Bar
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -153,7 +153,7 @@ public class ViewList extends ListActivity {
             View v = convertView;
 
             if ((v == null) || (v.getTag() == null)) {
-                v = inflater.inflate(R.layout.view_list_row,null);
+                v = inflater.inflate(R.layout.view_list_row, null);
                 holder = new BookViewHolder();
                 holder.title = (TextView)v.findViewById(R.id.row_title);
                 holder.authors = (TextView) v.findViewById(R.id.row_authors);
@@ -164,15 +164,18 @@ public class ViewList extends ListActivity {
             }
             else {
                 holder = (BookViewHolder) v.getTag();
+
             }
 
            holder.books = getItem(position);
+
 
             holder.title.setText(holder.books.title);
             holder.authors.setText(holder.books.authors);
             holder.desc.setText(holder.books.desc);
             holder.year.setText(holder.books.year);
             holder.publisher.setText(holder.books.publishers);
+
 
             v.setTag(holder);
             return v;
@@ -183,5 +186,24 @@ public class ViewList extends ListActivity {
             TextView title,authors,desc,year,publisher;
 
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        view.setSelected(true);
+     //   setContentView(R.layout.view_list_row_selected);
+        Utils.showUserMessage(this, "Clicked on item " + position);
+
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        v.setSelected(true);
+
+        Utils.showUserMessage(this, "Clicked on item " +  position);
+
+
     }
 }
