@@ -3,13 +3,16 @@ package bookmaster.davebilotta.com.bookmaster;
 import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,8 +21,9 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
     DB db;
     BookListAdapter adapter;
+    View lastClicked;
 
-     private class BookView {
+    private class BookView {
         public String title;
         public String desc;
         public String authors;
@@ -73,7 +77,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
         public BookListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
             books = new ArrayList<BookView>();
-                buildBooksTest();
+            buildBooksTest();
 
         }
 
@@ -83,15 +87,15 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
             //
 
             String[][] bookList = {
-            {"The Cat In The Hat","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","978-0-7172-6059-1"},
-            {"How The Grinch Stole Christmas!","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","0-394-80079-6"},
-            {"Pride and Prejudice","","Jane Austen","1813","",""},
-            {"To Kill A Mockingbird","Classic Book","Harper Lee","1960","Harper Classics","978-0-7172-6059-1"},
-            {"The Great Gatsby","","F. Scott Fitzgerald","1925","Random House",""},
-            {"Jane Eyre","Classic","Charlotte Bronte","1827","",""},
-            {"Charlie and the Chocolate Factory","Lukas' Favorite","Roald Dahl","1964","Alfred A. Knopf, Inc.",""},
-            {"The Mouse and the Motorcycle","Children's Classic","Beverly Cleary","1965","William Morrow",""},
-            {"Charlie and the Great Glass Elevator","Sequel to Charlie and the Chocolate Factory","Roald Dahl","1972","Alfred A. Knopf, Inc.","0-394-82472-5"},
+                    {"The Cat In The Hat","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","978-0-7172-6059-1"},
+                    {"How The Grinch Stole Christmas!","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","0-394-80079-6"},
+                    {"Pride and Prejudice","","Jane Austen","1813","",""},
+                    {"To Kill A Mockingbird","Classic Book","Harper Lee","1960","Harper Classics","978-0-7172-6059-1"},
+                    {"The Great Gatsby","","F. Scott Fitzgerald","1925","Random House",""},
+                    {"Jane Eyre","Classic","Charlotte Bronte","1827","",""},
+                    {"Charlie and the Chocolate Factory","Lukas' Favorite","Roald Dahl","1964","Alfred A. Knopf, Inc.",""},
+                    {"The Mouse and the Motorcycle","Children's Classic","Beverly Cleary","1965","William Morrow",""},
+                    {"Charlie and the Great Glass Elevator","Sequel to Charlie and the Chocolate Factory","Roald Dahl","1972","Alfred A. Knopf, Inc.","0-394-82472-5"},
 
             };
 
@@ -167,7 +171,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
             }
 
-           holder.books = getItem(position);
+            holder.books = getItem(position);
 
 
             holder.title.setText(holder.books.title);
@@ -191,8 +195,9 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         view.setSelected(true);
-     //   setContentView(R.layout.view_list_row_selected);
-        Utils.showUserMessage(this, "Clicked on item " + position);
+        //   setContentView(R.layout.view_list_row_selected);
+
+        Utils.showUserMessage(this, "ItemClicked on item " + position);
 
     }
 
@@ -200,10 +205,31 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        if (lastClicked != null) {
+            LinearLayout layout = (LinearLayout)lastClicked.findViewById(R.id.row_inflate);
+            layout.removeAllViews();
+        }
+
+
+
+        LinearLayout inflate = (LinearLayout)v.findViewById(R.id.row_inflate);
+        View inflatedView= getLayoutInflater().inflate(R.layout.view_list_row_selected, null);
+        inflate.addView(inflatedView);
+
+        lastClicked = v;
+
         v.setSelected(true);
-
-        Utils.showUserMessage(this, "Clicked on item " +  position);
-
+        v.setPressed(true);
+        //Utils.showUserMessage(this, "ListItemClicked on item " +  position);
 
     }
+
+    public void editButtonOnClick(View v) {
+        Utils.showUserMessage(this, "Edit Button Clicked");
+    }
+
+    public void deleteButtonOnClick(View v) {
+        Utils.showUserMessage(this, "Delete Button Clicked");
+    }
+
 }

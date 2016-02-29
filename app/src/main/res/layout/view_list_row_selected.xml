@@ -1,52 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/selected_row">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="match_parent"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Title"
-            android:textStyle="bold"
-            android:id="@+id/row_title" />
 
-        <TextView
-            android:layout_width="match_parent"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Authors"
-            android:textStyle="italic"
-            android:id="@+id/row_authors" />
+            android:id="@+id/editButton"
+            android:src="@drawable/ic_mode_edit_black_24dp"
+            android:onClick="editButtonOnClick"/>
 
-        <TextView
-            android:layout_width="match_parent"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Description"
-            android:id="@+id/row_desc"
-            android:layout_weight="0.13" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Year"
-            android:id="@+id/row_year" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Publisher"
-            android:id="@+id/row_publisher" />
+            android:id="@+id/deleteButton"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:onClick="deleteButtonOnClick"/>
 
     </LinearLayout>
 
-</LinearLayout>
+ </LinearLayout>
