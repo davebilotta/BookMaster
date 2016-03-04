@@ -3,25 +3,28 @@ package bookmaster.davebilotta.com.bookmaster;
 import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ViewList extends ListActivity implements AdapterView.OnItemClickListener {
+public class ViewList extends ListActivity implements AdapterView.OnItemClickListener,
+PopupMenu.OnMenuItemClickListener {
 
     DB db;
     BookListAdapter adapter;
     View lastClicked;
+    long lastId;
 
     private class BookView {
         public String title;
@@ -81,6 +84,10 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
         }
 
+        public ArrayList<BookView> getBooks() {
+            return this.books;
+        }
+
         public void buildBooksTest() {
             /* Test method used to populate view screen with date */
             // Title, Description, Authors, Year, Publisher, ISBN
@@ -111,9 +118,9 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
         public void buildBooks() {
             Cursor c = db.getBooks();
-            // TODO: Need to fix this later, method is deprecated
-
             int count = 0;
+
+            // TODO: Need to fix this later, method is deprecated
             startManagingCursor(c);
             if (c.moveToFirst()) {
                 do {
@@ -172,8 +179,6 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
             }
 
             holder.books = getItem(position);
-
-
             holder.title.setText(holder.books.title);
             holder.authors.setText(holder.books.authors);
             holder.desc.setText(holder.books.desc);
@@ -195,9 +200,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         view.setSelected(true);
-        //   setContentView(R.layout.view_list_row_selected);
 
-        Utils.showUserMessage(this, "ItemClicked on item " + position);
 
     }
 
@@ -205,31 +208,69 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+       // Utils.log("click1");
+
         if (lastClicked != null) {
             LinearLayout layout = (LinearLayout)lastClicked.findViewById(R.id.row_inflate);
             layout.removeAllViews();
         }
-
-
 
         LinearLayout inflate = (LinearLayout)v.findViewById(R.id.row_inflate);
         View inflatedView= getLayoutInflater().inflate(R.layout.view_list_row_selected, null);
         inflate.addView(inflatedView);
 
         lastClicked = v;
-
+        lastId = id;
         v.setSelected(true);
-        v.setPressed(true);
-        //Utils.showUserMessage(this, "ListItemClicked on item " +  position);
+
+        //BookListAdapter.BookViewHolder b = (BookListAdapter.BookViewHolder)getListAdapter().getItem(position);
+       //Utils.log("You clicked on " + b.books.title);
+      // getSelectedItemPosition();
+
+        Utils.log("You clicked on " + adapter.getBooks().get((int) id).title);
 
     }
 
-    public void editButtonOnClick(View v) {
-        Utils.showUserMessage(this, "Edit Button Clicked");
+    public void iconOnClick(View v) {
+        PopupMenu popup = new PopupMenu(this,v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.selected_popup);
+        popup.show();
     }
 
-    public void deleteButtonOnClick(View v) {
-        Utils.showUserMessage(this, "Delete Button Clicked");
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        View v = findViewById(android.R.id.content);
+
+        switch (item.getItemId()) {
+            case R.id.popup_details:
+                detailsOnClick(v);
+                break;
+
+            case R.id.popup_edit:
+                editOnClick(v);
+                break;
+            case R.id.popup_delete:
+                deleteOnClick(v);
+                break;
+            default:
+        }
+        return true;
+    }
+
+    public void detailsOnClick(View v) {
+        // Eventually launch to the detail activity
+        Utils.log("DETAILS");
+    }
+
+    public void editOnClick(View v) {
+
+        Utils.log("Editing " + adapter.getBooks().get((int) lastId).title);
+    }
+
+    public void deleteOnClick(View v) {
+        //Utils.showUserMessage(this, "Delete Button Clicked");
+        Utils.log("Deleting " + adapter.getBooks().get((int)lastId).title);
     }
 
 }
