@@ -3,8 +3,6 @@ package bookmaster.davebilotta.com.bookmaster;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +16,7 @@ public class BookEntry extends Activity  {
 
     EditText title,desc,authors,year,publisher, isbn;
     Button cancel,save;
-    DB db;
+    static DB db;
     Book book;
 
     @Override

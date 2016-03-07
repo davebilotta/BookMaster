@@ -1,19 +1,22 @@
 package bookmaster.davebilotta.com.bookmaster;
 
+import java.io.Serializable;
+
 /**
  * Created by Dave on 2/11/2016.
  */
-public class Book {
+public class Book implements Serializable {
     private int id;
     private int count;
     private String isbn;
     private String title;
-    private String[] authors;
+    //private String[] authors;
+    private String authors;
     private String desc;
-    private int year;
+    private String year;
     private String publisher;
 
-    public Book(int id, int count, String isbn, String title, String desc, String[] authors, int year, String publisher) {
+    public Book(int id, int count, String isbn, String title, String desc, String authors, String year, String publisher) {
         this.id = id;               // internal ID of book
         this.count = count;         // Number of copies of this book
         this.isbn = isbn;           // ISBN-10 or ISBN-13 number
@@ -52,7 +55,10 @@ public class Book {
         return this.count;
     }
 
-    public String getAuthors() {
+    public String getAuthors() { return this.authors;
+    }
+
+   /*public String getAuthors() {
         String authors = "";
         for (int i = 0; i < this.authors.length; i++) {
             if ((i + 1) == this.authors.length) {
@@ -65,9 +71,9 @@ public class Book {
             }
         }
         return authors;
-    }
+    } */
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 

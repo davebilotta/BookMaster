@@ -31,7 +31,7 @@
                 android:textStyle="italic"
                 android:id="@+id/row_authors" />
 
-            <TextView
+            <!-- <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Publisher"
-                android:id="@+id/row_publisher" />
+                android:id="@+id/row_publisher" /> -->
 
         </LinearLayout>
 

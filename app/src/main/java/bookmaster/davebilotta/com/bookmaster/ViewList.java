@@ -2,6 +2,7 @@ package bookmaster.davebilotta.com.bookmaster;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ViewList extends ListActivity implements AdapterView.OnItemClickListener,
-PopupMenu.OnMenuItemClickListener {
+        PopupMenu.OnMenuItemClickListener {
 
     DB db;
     BookListAdapter adapter;
@@ -31,7 +32,7 @@ PopupMenu.OnMenuItemClickListener {
         public String desc;
         public String authors;
         public String year;
-        public String publishers;
+        public String publisher;
         public String isbn;
 
         //ISBN13 format is:
@@ -40,12 +41,12 @@ PopupMenu.OnMenuItemClickListener {
         // ISBN13 format is:
         //    NNN-N-NNNN-NNNN-N (e.g. 978-0-7172-6059-1)
 
-        public BookView(String title, String desc, String authors, String year, String publishers, String isbn) {
+        public BookView(String title, String desc, String authors, String year, String publisher, String isbn) {
             this.title = title;
             this.desc = desc;
             this.authors = authors;
             this.year = year;
-            this.publishers = publishers;
+            this.publisher = publisher;
             this.isbn = isbn;
         }
     }
@@ -122,6 +123,7 @@ PopupMenu.OnMenuItemClickListener {
 
             // TODO: Need to fix this later, method is deprecated
             startManagingCursor(c);
+
             if (c.moveToFirst()) {
                 do {
                     String title = c.getString(c.getColumnIndex(DBShared.ITEM_TITLE));
@@ -168,9 +170,9 @@ PopupMenu.OnMenuItemClickListener {
                 holder = new BookViewHolder();
                 holder.title = (TextView)v.findViewById(R.id.row_title);
                 holder.authors = (TextView) v.findViewById(R.id.row_authors);
-                holder.desc = (TextView)v.findViewById(R.id.row_desc);
+                /* holder.desc = (TextView)v.findViewById(R.id.row_desc);
                 holder.year = (TextView)v.findViewById(R.id.row_year);
-                holder.publisher = (TextView)v.findViewById(R.id.row_publisher);
+                holder.publisher = (TextView)v.findViewById(R.id.row_publisher); */
                 v.setTag(holder);
             }
             else {
@@ -181,9 +183,9 @@ PopupMenu.OnMenuItemClickListener {
             holder.books = getItem(position);
             holder.title.setText(holder.books.title);
             holder.authors.setText(holder.books.authors);
-            holder.desc.setText(holder.books.desc);
+            /* holder.desc.setText(holder.books.desc);
             holder.year.setText(holder.books.year);
-            holder.publisher.setText(holder.books.publishers);
+            holder.publisher.setText(holder.books.publishers); */
 
 
             v.setTag(holder);
@@ -208,7 +210,7 @@ PopupMenu.OnMenuItemClickListener {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-       // Utils.log("click1");
+        // Utils.log("click1");
 
         if (lastClicked != null) {
             LinearLayout layout = (LinearLayout)lastClicked.findViewById(R.id.row_inflate);
@@ -224,11 +226,19 @@ PopupMenu.OnMenuItemClickListener {
         v.setSelected(true);
 
         //BookListAdapter.BookViewHolder b = (BookListAdapter.BookViewHolder)getListAdapter().getItem(position);
-       //Utils.log("You clicked on " + b.books.title);
-      // getSelectedItemPosition();
+        //Utils.log("You clicked on " + b.books.title);
+        // getSelectedItemPosition();
 
         Utils.log("You clicked on " + adapter.getBooks().get((int) id).title);
 
+    }
+
+    public Book createBook() {
+        BookView view = adapter.getBooks().get((int)lastId);
+
+        Book book = new Book((int)lastId,1,view.isbn,view.title,view.desc,view.authors,view.year,view.publisher);
+
+        return book;
     }
 
     public void iconOnClick(View v) {
@@ -259,18 +269,23 @@ PopupMenu.OnMenuItemClickListener {
     }
 
     public void detailsOnClick(View v) {
-        // Eventually launch to the detail activity
-        Utils.log("DETAILS");
+        Intent i = new Intent(this, DetailsActivity.class);
+        i.putExtra("id",lastId);
+        i.putExtra("ObjectID",createBook());
+
+        startActivity(i);
+
     }
 
     public void editOnClick(View v) {
-
         Utils.log("Editing " + adapter.getBooks().get((int) lastId).title);
+
+        // TODO: Launch BookEntryActivity
     }
 
     public void deleteOnClick(View v) {
-        //Utils.showUserMessage(this, "Delete Button Clicked");
         Utils.log("Deleting " + adapter.getBooks().get((int)lastId).title);
+
     }
 
 }
