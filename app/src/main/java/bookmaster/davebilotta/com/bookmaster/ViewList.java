@@ -281,6 +281,12 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
         Utils.log("Editing " + adapter.getBooks().get((int) lastId).title);
 
         // TODO: Launch BookEntryActivity
+        Intent i = new Intent(this, BookEntry.class);
+        i.putExtra("id",lastId);
+        i.putExtra("ObjectID", createBook());
+
+        startActivity(i);
+
     }
 
     public void deleteOnClick(View v) {

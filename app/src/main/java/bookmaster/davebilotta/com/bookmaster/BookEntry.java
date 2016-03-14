@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by Dave on 2/16/2016.
@@ -19,17 +20,39 @@ public class BookEntry extends Activity  {
     static DB db;
     Book book;
 
-    @Override
+       @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_entry);
         db = new DB(this);
-        db.open();
+        //db.open();
 
-        //book = new Book();
+         Intent i = getIntent();
+         Book book = (Book)i.getSerializableExtra("ObjectID");
 
-        // EditText components
-        title = (EditText) findViewById(R.id.titleText);
+         if (book != null) {
+             TextView title = (TextView) findViewById(R.id.titleText);
+             title.setText(book.getTitle());
+
+             TextView authors = (TextView) findViewById(R.id.authorsText);
+             authors.setText(book.getAuthors());
+
+             TextView desc = (TextView) findViewById(R.id.descText);
+             desc.setText(book.getDesc());
+
+             TextView year = (TextView) findViewById(R.id.yearText);
+             year.setText(book.getYear());
+
+             TextView publisher = (TextView) findViewById(R.id.publisherText);
+             publisher.setText(book.getPublisher());
+
+             TextView isbn = (TextView) findViewById(R.id.isbnText);
+             isbn.setText(book.getIsbn());
+       }
+
+        else {
+             title = (EditText) findViewById(R.id.titleText);
+         }
 
         // Button components
         cancel = (Button) findViewById(R.id.cancelButton);
@@ -59,6 +82,7 @@ public class BookEntry extends Activity  {
         isbn = (EditText) findViewById(R.id.isbnText);
 
         try {
+            db.open();
             db.insertBook(
                     title.getText().toString(),
                     desc.getText().toString(),
