@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 /**
  * Created by Dave on 2/16/2016.
  *
@@ -18,17 +20,33 @@ public class BookEntry extends Activity  {
     EditText title,desc,authors,year,publisher, isbn;
     Button cancel,save;
     static DB db;
-    Book book;
+    String id;                   // id of the item we're editing
+    Book book;                // Book we're editing
+    private boolean editMode; // true if editing an existing entry, else false
 
        @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_entry);
         db = new DB(this);
+
         //db.open();
 
          Intent i = getIntent();
          Book book = (Book)i.getSerializableExtra("ObjectID");
+
+         Serializable extra = i.getSerializableExtra("id");
+         if (extra != null) {
+             id = (String) extra;
+         }
+
+         if (i.getSerializableExtra("EditMode") == null) {
+             editMode = false;
+         }
+           else {
+             editMode = true;
+         }
+         Utils.log("EDITMODE IS " + editMode);
 
          if (book != null) {
              TextView title = (TextView) findViewById(R.id.titleText);
@@ -68,6 +86,9 @@ public class BookEntry extends Activity  {
             @Override
             public void onClick(View v) {
                 saveEntry();
+                finishActivity(1);
+                Intent i = new Intent(BookEntry.this, ViewList.class);
+                startActivity(i);
             }
         });
     }
@@ -78,18 +99,18 @@ public class BookEntry extends Activity  {
         desc = (EditText) findViewById(R.id.descText);
         authors = (EditText) findViewById(R.id.authorsText);
         year = (EditText) findViewById(R.id.yearText);
-        publisher  = (EditText) findViewById(R.id.publisherText);
+        publisher = (EditText) findViewById(R.id.publisherText);
         isbn = (EditText) findViewById(R.id.isbnText);
 
         try {
             db.open();
-            db.insertBook(
-                    title.getText().toString(),
-                    desc.getText().toString(),
-                    authors.getText().toString(),
-                    year.getText().toString(),
-                    publisher.getText().toString(),
-                    isbn.getText().toString());
+
+            if (editMode) {
+                updateBook();
+            } else {
+                createBook();
+
+            }
 
             db.close();
 
@@ -103,11 +124,33 @@ public class BookEntry extends Activity  {
 
             // TODO: Show Snackbar so user knows item was saved and they can keep adding more
             // TODO: Allow them to Undo?
-            Utils.showUserMessage(this,"Book added");
-        }
-        catch (Exception e) {
+            if (!editMode) Utils.showUserMessage(this, "Book saved");
+        } catch (Exception e) {
             Utils.log(e.getMessage());
         }
-
     }
+
+
+        private void createBook() {
+            db.insertBook(
+                    title.getText().toString(),
+                    desc.getText().toString(),
+                    authors.getText().toString(),
+                    year.getText().toString(),
+                    publisher.getText().toString(),
+                    isbn.getText().toString());
+        }
+
+
+        private void updateBook() {
+            db.updateBook(
+                id,
+                title.getText().toString(),
+                desc.getText().toString(),
+                authors.getText().toString(),
+                year.getText().toString(),
+                publisher.getText().toString(),
+                isbn.getText().toString());
+    }
+
 }

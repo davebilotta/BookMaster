@@ -76,6 +76,56 @@ public class DB {
         }
     }
 
+    public int updateBook(String id, String title, String desc, String authors, String year,
+                          String publisher, String isbn) {
+        try {
+            ContentValues entry = new ContentValues();
+            Utils.log("new title is " + title);
+            entry.put(DBShared.KEY_ID,id);
+            entry.put(DBShared.ITEM_TITLE, title);
+            entry.put(DBShared.ITEM_COUNT, 1);
+            entry.put(DBShared.ITEM_DESC, desc);
+
+            // TODO: Figure this out - how will multiples be returned by api?
+            entry.put(DBShared.ITEM_AUTHORS, authors);
+            entry.put(DBShared.ITEM_YEAR, year);
+            entry.put(DBShared.ITEM_PUBLISHER, publisher);
+            entry.put(DBShared.ITEM_ISBN, isbn);
+
+            //  entry.put(DBShared.CREATE_DATE, System.currentTimeMillis());
+
+            //return db.insert(DBShared.TABLE_NAME, null, entry);
+            String whereClause = "";
+            Utils.log("updating item with id " + id);
+            Cursor cursorQuery = db.query(DBShared.TABLE_NAME,new String[] {"desc"},"_id=?",
+                    new String[] {id+""},null,null,null);
+
+            Utils.log("Columns: " + cursorQuery.getColumnNames());
+            Utils.log("query" + cursorQuery);
+
+
+
+            return db.update(DBShared.TABLE_NAME, entry, "_id=?",new String[] { id+""});
+
+        } catch (SQLiteException e) {
+            Utils.log("Update Exception found", e.getMessage());
+            return -1;
+        }
+
+    }
+
+    public int deleteBook(String id) {
+        try {
+            Utils.log("Deleting id " + id);
+         //   db.open();
+            return db.delete(DBShared.TABLE_NAME, "_id=?",new String[] { id+""});
+        }
+        catch (SQLiteException e) {
+            Utils.log("Delete exception found", e.getMessage());
+            return -1;
+        }
+    }
+
     public Cursor getBooks() {
         Cursor c = db.query(DBShared.TABLE_NAME,null,null,null,null,null,null);
         return c;

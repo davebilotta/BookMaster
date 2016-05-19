@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -26,8 +28,10 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
     BookListAdapter adapter;
     View lastClicked;
     long lastId;
+    String lastIdInternal;
 
     private class BookView {
+        public String id;
         public String title;
         public String desc;
         public String authors;
@@ -41,7 +45,8 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
         // ISBN13 format is:
         //    NNN-N-NNNN-NNNN-N (e.g. 978-0-7172-6059-1)
 
-        public BookView(String title, String desc, String authors, String year, String publisher, String isbn) {
+        public BookView(String id, String title, String desc, String authors, String year, String publisher, String isbn) {
+            this.id = id;
             this.title = title;
             this.desc = desc;
             this.authors = authors;
@@ -73,6 +78,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
                         .setAction("Action", null).show();
             }
         }); */
+        db.close();
     }
 
     private class BookListAdapter extends BaseAdapter {
@@ -81,8 +87,8 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
         public BookListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
             books = new ArrayList<BookView>();
-            buildBooksTest();
-
+            //buildBooksTest();
+            buildBooks();
         }
 
         public ArrayList<BookView> getBooks() {
@@ -99,20 +105,20 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
                     {"How The Grinch Stole Christmas!","Children's Classic Book","Theodor Geisel (Dr. Seuss)","1957","Random House","0-394-80079-6"},
                     {"Pride and Prejudice","","Jane Austen","1813","",""},
                     {"To Kill A Mockingbird","Classic Book","Harper Lee","1960","Harper Classics","978-0-7172-6059-1"},
+                    {"To Kill A Mockingbird II","Not a real book","Dave Bilotta","2015","Harper Classics","111-0-7172-6059-1"},
                     {"The Great Gatsby","","F. Scott Fitzgerald","1925","Random House",""},
                     {"Jane Eyre","Classic","Charlotte Bronte","1827","",""},
                     {"Charlie and the Chocolate Factory","Lukas' Favorite","Roald Dahl","1964","Alfred A. Knopf, Inc.",""},
                     {"The Mouse and the Motorcycle","Children's Classic","Beverly Cleary","1965","William Morrow",""},
+                    {"To Kill A Mockingbird III","Also not a real book","Dave Bilotta","2016","Harper Classics","111-0-7172-6059-2"},
                     {"Charlie and the Great Glass Elevator","Sequel to Charlie and the Chocolate Factory","Roald Dahl","1972","Alfred A. Knopf, Inc.","0-394-82472-5"},
 
             };
 
             // TODO: Get date it was entered
-
-
             for (int i = 0; i < bookList.length; i++) {
                 String[] b = bookList[i];
-                books.add(new BookView(b[0],b[1],b[2],b[3],b[4],b[5]));
+                books.add(new BookView(i+"", b[0],b[1],b[2],b[3],b[4],b[5]));
             }
 
         }
@@ -126,6 +132,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
             if (c.moveToFirst()) {
                 do {
+                    String id = c.getString(c.getColumnIndex(DBShared.KEY_ID));
                     String title = c.getString(c.getColumnIndex(DBShared.ITEM_TITLE));
                     String desc = c.getString(c.getColumnIndex(DBShared.ITEM_DESC));
                     String authors = c.getString(c.getColumnIndex(DBShared.ITEM_AUTHORS));
@@ -134,8 +141,7 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
                     String isbn = c.getString(c.getColumnIndex(DBShared.ITEM_ISBN));
 
                     // TODO: Get date it was entered
-
-                    BookView temp = new BookView(title,desc,authors,year,publisher,isbn);
+                    BookView temp = new BookView(id,title,desc,authors,year,publisher,isbn);
                     books.add(temp);
                     count++;
                 }
@@ -223,13 +229,17 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
         lastClicked = v;
         lastId = id;
+        lastIdInternal = adapter.getBooks().get((int) id).id;
         v.setSelected(true);
+
+      //  Utils.log("id is " + lastClicked
+
 
         //BookListAdapter.BookViewHolder b = (BookListAdapter.BookViewHolder)getListAdapter().getItem(position);
         //Utils.log("You clicked on " + b.books.title);
         // getSelectedItemPosition();
 
-        Utils.log("You clicked on " + adapter.getBooks().get((int) id).title);
+        Utils.log("You clicked on " + lastIdInternal);
 
     }
 
@@ -282,16 +292,40 @@ public class ViewList extends ListActivity implements AdapterView.OnItemClickLis
 
         // TODO: Launch BookEntryActivity
         Intent i = new Intent(this, BookEntry.class);
-        i.putExtra("id",lastId);
+        i.putExtra("id",lastIdInternal);
         i.putExtra("ObjectID", createBook());
+        i.putExtra("EditMode",true);
 
         startActivity(i);
 
     }
 
     public void deleteOnClick(View v) {
-        Utils.log("Deleting " + adapter.getBooks().get((int)lastId).title);
+        Utils.log("Deleting " + adapter.getBooks().get((int) lastId).title);
 
+        //DB db = new DB(this);
+        try {
+            this.db.open();
+
+            this.db.deleteBook(lastIdInternal);
+            Utils.log("Before clear/notify");
+            adapter.books.clear();
+            adapter.notifyDataSetChanged();
+
+            Utils.log("Before buildbooks");
+            adapter.buildBooks();
+            Utils.log("After buildBooks");
+
+ //           this.db.close();
+
+
+            this.db.close();
+            Utils.log("after db.close");
+
+        }
+        catch (SQLiteException e) {
+            e.printStackTrace();
+        }
     }
 
 }
